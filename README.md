@@ -23,6 +23,14 @@ jupyter notebook pandoc-zhtw.ipynb &> /dev/null &
 ./release --notebook pandoc-zhtw.ipynb
 ```
 
+如果有权限问题运行不了，首先让`release`可执行：
+
+```
+chmod +x release
+```
+
+之后就可以用上面一行命令编译了。
+
 ### 问题解答
 
 #### 如何调整纸张和页边距？
