@@ -1,0 +1,21 @@
+#!/usr/bin/env sos-runner
+#fileformat=SOS1.0
+
+parameter: theme = path('pm-template.latex')
+parameter: notebook = path()
+
+[1]
+depends: Py_Module('ipyrmd')
+fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
+input: notebook
+output: f'{_input:n}.md'
+run: expand = True, stdout = False
+    ipyrmd --from ipynb --to Rmd -y -o {_output} {_input}
+
+# see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
+[2]
+depends: executable('pandoc')
+output: f'{_input:n}.pdf'
+run: docker_image = "gaow/debian-texlive", expand = True
+    pandoc --toc -N --template={theme:n} --highlight-style tango --smart --latex-engine=xelatex -V mainfont='WenQuanYi Micro Hei' -V urlcolor=cyan -o {_output} {_input}
+_input.zap()
