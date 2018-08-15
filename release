@@ -6,7 +6,7 @@ parameter: notebook = path()
 parameter: fontsize = "12pt"
 parameter: papersize = "a4paper"
 parameter: urlcolor = "cyan"
-parameter: mainfont = "WenQuanYi Micro Hei"
+parameter: highlight = "tango" # set to "" to disable syntax highlight
 
 [1]
 depends: Py_Module('ipyrmd')
@@ -14,12 +14,12 @@ fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 input: notebook
 output: f'{_input:n}.md'
 run: expand = True, stdout = False
-    ipyrmd --from ipynb --to Rmd -y -o {_output} {_input}
+     ipyrmd --from ipynb --to Rmd -y -o {_output} {_input}
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [2]
 depends: executable('pandoc')
 output: f'{_input:n}.pdf'
 run: docker_image = "gaow/debian-texlive", expand = True
-    pandoc --toc -N --template={theme:n} --highlight-style tango --smart --latex-engine=xelatex -V mainfont='{mainfont}' -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -o {_output} {_input}
+     pandoc --toc -N --template={theme:n} {"--highlight-style" if highlight else ""} {highlight} --smart --latex-engine=xelatex -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -o {_output} {_input}
 _input.zap()
