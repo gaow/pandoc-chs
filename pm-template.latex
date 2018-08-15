@@ -173,6 +173,7 @@ $if(toc)$
 {
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
+\renewcommand{\contentsname}{目录}
 \tableofcontents
 }
 $endif$
