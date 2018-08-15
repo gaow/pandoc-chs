@@ -174,8 +174,10 @@ $if(toc)$
 {
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
-\renewcommand{\contentsname}{目录}
+\renewcommand{\contentsname}{$title-meta$}
+{\pagestyle{plain}
 \tableofcontents
+\cleardoublepage}
 }
 $endif$
 $body$

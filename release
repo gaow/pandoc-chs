@@ -8,6 +8,7 @@ parameter: papersize = "a4paper"
 parameter: titlepage = "titlepage" # set to "notitlepage" to disable title page
 parameter: urlcolor = "cyan"
 parameter: highlight = "tango" # set to "" to disable syntax highlight
+fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 
 [ipynb_md: provides = '{data}.md']
 depends: Py_Module('ipyrmd')
@@ -17,7 +18,6 @@ run: expand = True, stdout = False
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [default]
-fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 depends: executable('pandoc')
 input: f'{notebook:n}.md', theme
 output: f'{notebook:n}.pdf'
