@@ -5,21 +5,21 @@ parameter: theme = path('pm-template.latex')
 parameter: notebook = path()
 parameter: fontsize = "12pt"
 parameter: papersize = "a4paper"
+parameter: titlepage = "titlepage" # set to "notitlepage" to disable title page
 parameter: urlcolor = "cyan"
 parameter: highlight = "tango" # set to "" to disable syntax highlight
 
-[1]
+[ipynb_md: provides = '{data}.md']
 depends: Py_Module('ipyrmd')
-fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
-input: notebook
-output: f'{_input:n}.md'
+output: f'{data}.md'
 run: expand = True, stdout = False
-     ipyrmd --from ipynb --to Rmd -y -o {_output} {_input}
+     ipyrmd --from ipynb --to Rmd -y -o {data}.md {data}.ipynb
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
-[2]
+[default]
+fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 depends: executable('pandoc')
-output: f'{_input:n}.pdf'
+input: f'{notebook:n}.md', theme
+output: f'{notebook:n}.pdf'
 run: docker_image = "gaow/debian-texlive", expand = True
-     pandoc --toc -N --template={theme:n} {"--highlight-style" if highlight else ""} {highlight} --smart --latex-engine=xelatex -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -o {_output} {_input}
-_input.zap()
+     pandoc --toc -N --template={_input[1]:n} {"--highlight-style" if highlight else ""} {highlight} --smart --latex-engine=xelatex -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -V titlepage={titlepage} -o {_output} {_input[0]} && rm -f {_input[0]}
