@@ -3,6 +3,10 @@
 
 parameter: theme = path('pm-template.latex')
 parameter: notebook = path()
+parameter: fontsize = "12pt"
+parameter: papersize = "a4paper"
+parameter: urlcolor = "cyan"
+parameter: mainfont = "WenQuanYi Micro Hei"
 
 [1]
 depends: Py_Module('ipyrmd')
@@ -17,5 +21,5 @@ run: expand = True, stdout = False
 depends: executable('pandoc')
 output: f'{_input:n}.pdf'
 run: docker_image = "gaow/debian-texlive", expand = True
-    pandoc --toc -N --template={theme:n} --highlight-style tango --smart --latex-engine=xelatex -V mainfont='WenQuanYi Micro Hei' -V urlcolor=cyan -o {_output} {_input}
+    pandoc --toc -N --template={theme:n} --highlight-style tango --smart --latex-engine=xelatex -V mainfont='{mainfont}' -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -o {_output} {_input}
 _input.zap()
