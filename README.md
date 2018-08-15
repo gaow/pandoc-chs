@@ -17,6 +17,8 @@ jupyter notebook pandoc-zhtw.ipynb &> /dev/null &
 
 ### `pandoc`编译
 
+`release`脚本用SoS语言编写，使用预先提供的`docker`容器。用户电脑上不用安装`LaTeX`和`pandoc`。安装`docker`后直接运行下命令即可：
+
 ```bash
 ./release --notebook pandoc-zhtw.ipynb
 ```
