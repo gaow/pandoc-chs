@@ -11,10 +11,9 @@ parameter: highlight = "tango" # set to "" to disable syntax highlight
 fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 
 [ipynb_md: provides = '{data}.md']
-depends: Py_Module('ipyrmd')
 output: f'{data}.md'
-run: expand = True, stdout = False
-     ipyrmd --from ipynb --to Rmd -y -o {data}.md {data}.ipynb
+run: expand = True, stderr = False
+     jupyter nbconvert {data}.ipynb --to markdown
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [default]
