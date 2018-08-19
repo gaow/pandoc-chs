@@ -14,6 +14,10 @@ fail_if(not notebook.is_file(), msg = 'Need input parameter ``--notebook``')
 output: f'{data}.md'
 run: expand = True, stderr = False
      jupyter nbconvert {data}.ipynb --to markdown
+python: expand = True
+     text = open('{data}.md').read().strip()
+     with open('{data}.md', 'w') as f:
+          f.write(text)
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [default]
