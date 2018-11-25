@@ -113,7 +113,15 @@ $endif$
             pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
 % smaller font size for code
-\renewenvironment{Shaded} {\begin{snugshade}\footnotesize} {\end{snugshade}}
+\makeatletter
+\@ifundefined{Shaded}{
+}{\renewenvironment{Shaded}{\begin{kframe}\footnotesize}{\end{kframe}}}
+\@ifpackageloaded{fancyvrb}{%
+  % https://github.com/CTeX-org/ctex-kit/issues/331
+  \RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},formatcom=\xeCJKVerbAddon}%
+}{}
+\makeatother
+
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
 \renewcommand{\href}[2]{#2\footnote{\url{#1}}}

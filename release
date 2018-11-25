@@ -24,5 +24,5 @@ python: expand = True
 depends: executable('pandoc')
 input: f'{notebook:n}.md', theme
 output: f'{notebook:n}.pdf'
-bash: docker_image = "gaow/debian-texlive", expand = True
+bash: container = "gaow/debian-texlive", expand = True, volumes = [f'{_input[0]:ad}:{_input[0]:ad}']
      pandoc --toc -N --smart --latex-engine=xelatex --template={_input[1]:n} {"--highlight-style" if highlight else ""} {highlight} -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -V titlepage={titlepage} -o {_output} {_input[0]} && rm -f {_input[0]}
