@@ -23,6 +23,13 @@ jupyter notebook pandoc-zhtw.ipynb &> /dev/null &
 ./release --notebook pandoc-zhtw.ipynb
 ```
 
+对于简单的纯markdown的notebook，
+
+```bash
+./release --notebook pandoc-zhtw.ipynb --via md
+```
+
+
 如果有权限问题运行不了，首先让`release`可执行：
 
 ```
