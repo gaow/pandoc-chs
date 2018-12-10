@@ -6,6 +6,8 @@ parameter: notebook = path()
 parameter: fontsize = "12pt"
 parameter: papersize = "a4paper"
 parameter: title = ""
+parameter: date = ""
+parameter: logo = path("logo.pdf")
 # set to "--no-titlepage" to disable title page
 parameter: titlepage = True
 parameter: urlcolor = "cyan"
@@ -38,6 +40,8 @@ python: expand = True
           text = '<head><title>{title}</title></head>\n' + text
      # remove anchor
      text = re.sub(r'<a class="anchor-link"(.+?)182;</a>', '', text)
+     # remove SoS hint
+     text = re.sub(r'<div class="sos_hint">(.+?)</div>', '', text)
      with open('{data}.html', 'w') as f:
           f.write(text)
 
@@ -48,4 +52,4 @@ input: f'{notebook:an}.{via}', theme
 output: f'{notebook:an}.pdf'
 bash: container = "gaow/debian-texlive", expand = True, volumes = [f'{_input[0]:d}:{_input[0]:d}', f'{_input[1]:ad}:{_input[1]:ad}'], workdir = f'{_input[0]:d}'
      echo "Convertion in progress ... please stay tuned :)"
-     pandoc --toc -N --smart --latex-engine=xelatex --template={_input[1]:an} {"--highlight-style" if highlight else ""} {highlight} -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -V titlepage={'titlepage' if titlepage else notitlepage} -o {_output} {_input[0]} && rm -f {_input[0]}
+     pandoc --toc -N --smart -f html+tex_math_dollars+tex_math_single_backslash --latex-engine=xelatex --template={_input[1]:an} {"--highlight-style" if highlight else ""} {highlight} -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -V titlepage={'titlepage' if titlepage else notitlepage} {"-V date='%s'" % date if date else ""} {"-V logo='%s'" % logo.resolve() if logo.is_file() else ""} -o {_output} {_input[0]} && rm -f {_input[0]}

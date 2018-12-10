@@ -145,6 +145,10 @@ $endif$
 \usepackage{lastpage}
 \pagestyle{fancyplain}
 
+$if(logo)$
+\rhead{\Oldincludegraphics[scale=0.145]{$logo$}}
+$endif$
+
 $if(numbersections)$
 \setcounter{secnumdepth}{5}
 $else$
@@ -168,7 +172,7 @@ $endfor$
 $if(title)$
 \title{$title$}
 $endif$
-\author{$for(author)$$author$$sep$ \and $endfor$}
+\author{$for(author)$$author$$sep$ \and $endfor$ $if(logo)$\Oldincludegraphics[scale=0.185]{$logo$}$endif$}
 \date{$date$}
 
 \begin{document}
