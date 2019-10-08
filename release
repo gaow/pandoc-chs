@@ -7,7 +7,7 @@ parameter: fontsize = "12pt"
 parameter: papersize = "a4paper"
 parameter: title = ""
 parameter: date = ""
-parameter: numbersections = 1
+parameter: numbersections = 5
 parameter: logo = path("logo.pdf")
 # set to "--no-titlepage" to disable title page
 parameter: titlepage = True

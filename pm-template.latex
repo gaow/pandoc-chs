@@ -150,10 +150,9 @@ $if(logo)$
 $endif$
 
 $if(numbersections)$
-\setcounter{secnumdepth}{5}
-$else$
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{$numbersections$}
 $endif$
+
 $if(verbatim-in-note)$
 \VerbatimFootnotes % allows verbatim text in footnotes
 $endif$
