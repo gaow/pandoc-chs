@@ -1,13 +1,14 @@
 #!/usr/bin/env sos-runner
 #fileformat=SOS1.0
 
-parameter: theme = path('pm-template.latex')
+parameter: theme = path('docs/pm-template.latex')
 parameter: notebook = path()
 parameter: fontsize = "12pt"
 parameter: papersize = "a4paper"
 parameter: title = ""
 parameter: date = ""
-parameter: numbersections = 5
+# set it to a number eg 5 if you want to have up to eg 5 levels of section numbering
+parameter: numbersections = 0
 parameter: logo = path("logo.pdf")
 # set to "--no-titlepage" to disable title page
 parameter: titlepage = True
@@ -45,6 +46,10 @@ python: expand = True
      text = re.sub(r'<div class="sos_hint">(.+?)</div>', '', text)
      with open('{data}.html', 'w') as f:
           f.write(text)
+
+[get_theme: provides = theme]
+download: dest_file = theme
+  https://raw.githubusercontent.com/gaow/pandoc-chs/master/pm-template.latex
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [default]
