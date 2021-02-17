@@ -53,9 +53,26 @@ download: dest_file = theme
 
 # see https://jdhao.github.io/2017/12/10/pandoc-markdown-with-chinese/
 [default]
-depends: executable('pandoc')
 input: f'{notebook:an}.{via}', theme
 output: f'{notebook:an}.pdf'
 bash: container = "gaow/debian-texlive", expand = True, volumes = [f'{_input[0]:d}:{_input[0]:d}', f'{_input[1]:ad}:{_input[1]:ad}'], workdir = f'{_input[0]:d}'
      echo "Convertion in progress ... please stay tuned :)"
      pandoc --toc -N --smart -f html+tex_math_dollars+tex_math_single_backslash --latex-engine=xelatex --template={_input[1]:an} {"--highlight-style" if highlight else ""} {highlight} -V urlcolor={urlcolor} -V fontsize={fontsize} -V papersize={papersize} -V titlepage={'titlepage' if titlepage else notitlepage} {"-V date='%s'" % date if date else ""} {"-V logo='%s'" % logo.resolve() if logo.is_file() else ""} -V numbersections={numbersections} -o {_output} {_input[0]} && rm -f {_input[0]}
+
+[docx_1]
+input: notebook
+output: f'{notebook:n}.no_input.ipynb'
+python: container = "gaow/jupyter-docx", expand = True
+   import nbformat
+   nb = nbformat.read({_input:r}, as_version=4)
+   nb['metadata']['jupyter-docx-bundler'] = dict(exclude_input="True")
+   nbformat.write(nb, {_output:r})
+
+[docx_2]
+output: f'{notebook:n}.docx'
+bash: container = "gaow/jupyter-docx", expand = True
+   jupyter nbconvert {_input} --output {_output} --to=docx
+
+[docx_3]
+bash: expand = True
+   rm -f {notebook:n}.no_input.ipynb
